@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: jEaj6knQh9WM8m0
+      MYSQL_DATABASE: orders
+      MYSQL_USER: developer
+      MYSQL_PASSWORD: yer1S6W3FiEURol
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot_app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/orders
+      SPRING_DATASOURCE_USERNAME: developer
+      SPRING_DATASOURCE_PASSWORD: yer1S6W3FiEURol
+
+volumes:
+  mysql_data:
