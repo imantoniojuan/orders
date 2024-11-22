@@ -63,4 +63,41 @@ public class OrderItem extends BaseEntity {
     public void setSubTotal(Double subTotal) {
         this.subTotal = subTotal;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
+        result = prime * result + ((unitPrice == null) ? 0 : unitPrice.hashCode());
+        result = prime * result + ((subTotal == null) ? 0 : subTotal.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        OrderItem other = (OrderItem) obj;
+        if (quantity == null) {
+            if (other.quantity != null)
+                return false;
+        } else if (!quantity.equals(other.quantity))
+            return false;
+        if (unitPrice == null) {
+            if (other.unitPrice != null)
+                return false;
+        } else if (!unitPrice.equals(other.unitPrice))
+            return false;
+        if (subTotal == null) {
+            if (other.subTotal != null)
+                return false;
+        } else if (!subTotal.equals(other.subTotal))
+            return false;
+        return true;
+    }
 }

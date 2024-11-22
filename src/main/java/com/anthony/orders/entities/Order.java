@@ -74,5 +74,40 @@ public class Order extends BaseEntity {
                 + totalAmount + ", getId()=" + getId() + "]";
     }
 
-    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((orderedAt == null) ? 0 : orderedAt.hashCode());
+        result = prime * result + ((status == null) ? 0 : status.hashCode());
+        result = prime * result + ((totalAmount == null) ? 0 : totalAmount.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Order other = (Order) obj;
+        if (orderedAt == null) {
+            if (other.orderedAt != null)
+                return false;
+        } else if (!orderedAt.equals(other.orderedAt))
+            return false;
+        if (status == null) {
+            if (other.status != null)
+                return false;
+        } else if (!status.equals(other.status))
+            return false;
+        if (totalAmount == null) {
+            if (other.totalAmount != null)
+                return false;
+        } else if (!totalAmount.equals(other.totalAmount))
+            return false;
+        return true;
+    }
 }

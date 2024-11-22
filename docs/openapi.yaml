@@ -506,6 +506,7 @@ components:
         orderedAt:
           type: string
           format: date-time
+          readOnly: true
         status:
           type: string
           example: "Processing"
@@ -513,7 +514,6 @@ components:
           type: number
           format: float
           example: 10.00
-          readOnly: true
         updatedAt:
           type: string
           format: date-time
@@ -537,9 +537,6 @@ components:
           type: integer
           example: 3
           required: true
-        status:
-          type: string
-          example: "Processing"
         unitPrice:
           type: number
           format: float

@@ -28,7 +28,7 @@ public class CustomerService {
             customer.setEmail(customerRequest.getEmail() != null ? customerRequest.getEmail() : customer.getEmail());
             customer.setName(customerRequest.getName() != null ? customerRequest.getName() : customer.getName());
 
-            customer = customerRepository.save(customer).clean();
+            customer = customerRepository.save(customer);
         }
 
         return customer;
@@ -39,7 +39,7 @@ public class CustomerService {
 
         Optional<Customer> customerOpt = customerRepository.findById(id);
         if(customerOpt!=null && customerOpt.isPresent()){
-            customer = customerOpt.get().clean();
+            customer = customerOpt.get();
         }
 
         return customer;

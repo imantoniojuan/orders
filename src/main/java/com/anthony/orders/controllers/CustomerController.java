@@ -27,19 +27,18 @@ public class CustomerController extends BaseController{
     @Autowired
     private CustomerService customerService;
 
-    @PutMapping("")
-    public ResponseEntity<CustomerPutResponse> modify(HttpServletRequest request, @RequestBody CustomerPutRequest customerRequest) {
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerPutResponse> modify(HttpServletRequest request, @PathVariable Long id, @RequestBody CustomerPutRequest customerRequest) {
         CustomerPutResponse response = new CustomerPutResponse();
         prepare(response);
     
-        String email = (String) request.getAttribute("customerEmail");
-        Long id = (Long) request.getAttribute("customerId");
+        Long customerId = (Long) request.getAttribute("customerId");
 
-        if(!customerRequest.getEmail().equals(email)){
-            response.setErrorMessage("Invalid email.");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        if(customerId!=id){
+            response.setErrorMessage("Not allowed to modify customer.");
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
         }
-        customerRequest.setId(id);
+        customerRequest.setId(customerId);
 
         response.setCustomer(customerService.modify(customerRequest));
 
