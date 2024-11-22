@@ -16,6 +16,7 @@ public class Customer extends BaseEntity implements UserDetails{
     private String name;
     private String email;
     private String address;
+    @JsonIgnore
     private String password;
     private String contactNumber;
 

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ProductService {
 
@@ -25,7 +27,8 @@ public class ProductService {
 
         Optional<Product> productOpt = productRepository.findByUpc(request.getUpc());
         if(productOpt.isPresent()){
-            product = productOpt.get();
+            if(productOpt.get().getName().equals(request.getName()) && productOpt.get().getDescription().equals(request.getDescription()))
+                product = productOpt.get();
         }
         else{
             product.setUpc(request.getUpc());
@@ -40,8 +43,8 @@ public class ProductService {
   
     public Product modify(ProductPutRequest request){
         Product product = new Product();
-        Optional<Product> productOpt = productRepository.findById(request.getId());
 
+        Optional<Product> productOpt = productRepository.findById(request.getId());
         if(productOpt.isPresent()){
             product = productOpt.get();            
             product.setUpc(request.getUpc() != null ? request.getUpc() : product.getUpc());
@@ -55,23 +58,29 @@ public class ProductService {
 
     public List<Product> findAll(){
         List<Product> orderList = new ArrayList<>();
+
         Iterable<Product> orderListIterable = productRepository.findAll();
         orderListIterable.forEach(orderList::add);
+
         return orderList;
     }
 
     public Product findById(Long id){
         Product product = new Product();
+
         Optional<Product> productOpt = productRepository.findById(id);
         if(productOpt.isPresent()){
             product = productOpt.get();
         }
+
         return product;
     }
 
-    public Long deleteById(Long id){
-        // TODO: delete all order-items first
+    @Transactional
+    public Long deleteByIdAndCustomerId(Long id, Long customerId){
+
         productRepository.deleteById(id);
+
         return id;
     }
 }

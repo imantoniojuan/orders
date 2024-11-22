@@ -51,43 +51,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.sendError(401);
-            filterChain.doFilter(request, response);
-            return;
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization token is missing or invalid.");
+            return; // Stop further execution
         }
-        else{
-            try {
-                final String jwt = authHeader.substring(7);
-                final String customerEmail = jwtService.extractUsername(jwt);
-                final Long customerId = jwtService.extractId(jwt);
+        try {
+            final String jwt = authHeader.substring(7);
+            final String customerEmail = jwtService.extractUsername(jwt);
+            final Long customerId = jwtService.extractId(jwt);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-                if (customerEmail != null && authentication == null) {
-                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(customerEmail);
-                    
-                    if (jwtService.isTokenValid(jwt, userDetails)) {
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+            if (customerEmail != null && authentication == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(customerEmail);
+                
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                        request.setAttribute("customerEmail", customerEmail);
-                        request.setAttribute("customerId", customerId);
-                    }
+                    request.setAttribute("customerEmail", customerEmail);
+                    request.setAttribute("customerId", customerId);
                 }
-
-                filterChain.doFilter(request, response);
-
-            } catch (Exception exception) {
-                logger.error(exception.getMessage());
-                response.sendError(400, exception.getMessage());
-                handlerExceptionResolver.resolveException(request, response, null, exception);
             }
+
+            filterChain.doFilter(request, response);
+
+        } catch (Exception exception) {
+            logger.error(exception.getMessage());
+            response.sendError(400, exception.getMessage());
+            handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }
 

@@ -1,22 +1,20 @@
 package com.anthony.orders.dtos.requests;
 
-import com.anthony.orders.entities.Customer;
-
 public class OrderPostRequest {
-    private Customer customer;
+    private Long customerId;
     private String status;
     private Double totalAmount;
 
     public OrderPostRequest(){
 
     }
-    
-    public Customer getCustomer() {
-        return customer;
+
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getStatus() {
@@ -34,4 +32,6 @@ public class OrderPostRequest {
     public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
+    
+   
 }

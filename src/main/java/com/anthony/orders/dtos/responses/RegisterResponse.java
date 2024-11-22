@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.anthony.orders.entities.Customer;
 
 public class RegisterResponse extends ResponseStatus{
+    private Long id;
     private String name;
     private String email;
     private String address;
@@ -17,11 +18,20 @@ public class RegisterResponse extends ResponseStatus{
     }
 
     public RegisterResponse(Customer customer){
+        this.id = customer.getId();
         this.name = customer.getName();
         this.email = customer.getEmail();
         this.address = customer.getAddress();
         this.contactNumber = customer.getContactNumber();
         this.updatedAt = customer.getUpdatedAt();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

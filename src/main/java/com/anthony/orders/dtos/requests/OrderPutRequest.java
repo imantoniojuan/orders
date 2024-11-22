@@ -2,11 +2,9 @@ package com.anthony.orders.dtos.requests;
 
 import java.time.LocalDateTime;
 
-import com.anthony.orders.entities.Customer;
-
 public class OrderPutRequest {
     private Long id;
-    private Customer customer;
+    private Long customerId;
     private LocalDateTime orderedAt;
     private String status;
     private Double totalAmount;
@@ -14,7 +12,7 @@ public class OrderPutRequest {
     public OrderPutRequest(){
 
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -23,12 +21,12 @@ public class OrderPutRequest {
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public LocalDateTime getOrderedAt() {
@@ -54,4 +52,6 @@ public class OrderPutRequest {
     public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
+    
+    
 }

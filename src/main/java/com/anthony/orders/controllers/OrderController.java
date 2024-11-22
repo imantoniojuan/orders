@@ -27,7 +27,6 @@ import com.anthony.orders.dtos.responses.OrderPostResponse;
 import com.anthony.orders.dtos.responses.OrderPutResponse;
 import com.anthony.orders.dtos.responses.Pagination;
 import com.anthony.orders.entities.Order;
-import com.anthony.orders.services.CustomerService;
 import com.anthony.orders.services.OrderService;
 
 @RequestMapping("/api/orders")
@@ -37,41 +36,17 @@ public class OrderController extends BaseController{
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private CustomerService customerService;
-
     @PostMapping("")
     public ResponseEntity<OrderPostResponse> add(HttpServletRequest request, @RequestBody OrderPostRequest orderPostRequest) {
         OrderPostResponse response = new OrderPostResponse();
         prepare(response);
     
         Long customerId = (Long) request.getAttribute("customerId");
-        orderPostRequest.setCustomer(customerService.findById(customerId));
+        orderPostRequest.setCustomerId(customerId);
         response.setOrder(orderService.add(orderPostRequest));
 
         conclude(response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
-    @PutMapping("")
-    public ResponseEntity<OrderPutResponse> modify(HttpServletRequest request, @RequestBody OrderPutRequest orderPutRequest) {
-        OrderPutResponse response = new OrderPutResponse();
-        prepare(response);
-    
-        Long customerId = (Long) request.getAttribute("customerId");
-        orderPutRequest.setCustomer(customerService.findById(customerId));
-        Order order = orderService.modify(orderPutRequest);
-
-        if(order.getId() == null){
-            response.setErrorMessage("Not allowed to modify order");
-            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-        }
-        else{
-            response.setOrder(order);
-        }
-        
-        conclude(response);
-		return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -106,6 +81,28 @@ public class OrderController extends BaseController{
         }
         
 
+        conclude(response);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderPutResponse> modify(HttpServletRequest request, @PathVariable Long id, @RequestBody OrderPutRequest orderPutRequest) {
+        OrderPutResponse response = new OrderPutResponse();
+        prepare(response);
+    
+        Long customerId = (Long) request.getAttribute("customerId");
+        orderPutRequest.setCustomerId(customerId);
+        orderPutRequest.setId(id);
+        Order order = orderService.modify(orderPutRequest);
+
+        if(order.getId() == null){
+            response.setErrorMessage("Not allowed to modify order");
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        }
+        else{
+            response.setOrder(order);
+        }
+        
         conclude(response);
 		return new ResponseEntity<>(response, HttpStatus.OK);
     }

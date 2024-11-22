@@ -3,6 +3,8 @@ package com.anthony.orders.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,29 +41,18 @@ public class ProductController extends BaseController{
         ProductPostResponse response = new ProductPostResponse();
         prepare(response);
     
-        response.setProduct(productService.add(productPostRequest));
-
-        conclude(response);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
-    @PutMapping("")
-    public ResponseEntity<ProductPutResponse> modify(@RequestBody ProductPutRequest productPutRequest) {
-        ProductPutResponse response = new ProductPutResponse();
-        prepare(response);
-    
-        Product product = productService.modify(productPutRequest);
+        Product product = productService.add(productPostRequest);
 
         if(product.getId() == null){
-            response.setErrorMessage("Product ID not found");
-            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+            response.setErrorMessage("Error adding product - UPC exist for another product");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         else{
             response.setProduct(product);
         }
-        
+
         conclude(response);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("")
@@ -97,6 +88,26 @@ public class ProductController extends BaseController{
 		return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductPutResponse> modify(@PathVariable Long id, @RequestBody ProductPutRequest productPutRequest) {
+        ProductPutResponse response = new ProductPutResponse();
+        prepare(response);
+    
+        productPutRequest.setId(id);
+        Product product = productService.modify(productPutRequest);
+
+        if(product.getId() == null){
+            response.setErrorMessage("Product ID not found");
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        }
+        else{
+            response.setProduct(product);
+        }
+        
+        conclude(response);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductGetByIdResponse> getById(@PathVariable Long id) {
         ProductGetByIdResponse response = new ProductGetByIdResponse();
@@ -109,11 +120,12 @@ public class ProductController extends BaseController{
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDeleteByIdResponse> deleteById(@PathVariable Long id) {
+    public ResponseEntity<ProductDeleteByIdResponse> deleteById(HttpServletRequest request, @PathVariable Long id) {
         ProductDeleteByIdResponse response = new ProductDeleteByIdResponse();
         prepare(response);
 
-        Long productId = productService.deleteById(id);
+        Long customerId = (Long) request.getAttribute("customerId");
+        Long productId = productService.deleteByIdAndCustomerId(id, customerId);
         if(productId!=null){
             response.setId(productId);
         }
