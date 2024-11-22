@@ -28,6 +28,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/orders
       SPRING_DATASOURCE_USERNAME: developer
       SPRING_DATASOURCE_PASSWORD: yer1S6W3FiEURol
+    command: ["/app/wait-for-db.sh", "db", "3306"]
 
 volumes:
   mysql_data:
