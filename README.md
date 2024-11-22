@@ -16,7 +16,15 @@ For building and running the application you need:
 
 #### Manual Build and Run:
 
-There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `com.anthony.orders.OrdersApplication` class from your IDE.
+A local database has to be running to be able to run unit tests or the application locally. One of the ways I did it was using a Docker Instance for MySQL 8.0
+
+```
+docker run --name mysql-local -e MYSQL_ROOT_PASSWORD=jEaj6knQh9WM8m0 -e MYSQL_USER=developer -e MYSQL_PASSWORD=yer1S6W3FiEURol -e MYSQL_DATABASE=bookstore -p 3306:3306 -d mysql:8.0.40
+```
+
+There are several ways to run a Spring Boot application on your local machine. 
+
+First, is to execute the `main` method in the `com.anthony.orders.OrdersApplication` class from your IDE.
 
 Second, you can use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
 
@@ -66,6 +74,8 @@ Unit tests can be run like so:
 mvn test
 ```
 
+However, there needs to be a running database for the application to connect to. See [Running the application locally](#running-the-application-locally).
+
 ## Future implementations
 
 Some features that could be implemented:
@@ -74,6 +84,8 @@ Some features that could be implemented:
 * Make use of an SMTP service to send a registation OTP upon registration
 * Breaking down of the full application into microservices
 * Make use of any caching mechanisms for optimizations on scaling
+* Make use of cloud native services to store secrets and make use of password/secret rotations
+* Deploy containers into a registry and deploy containers into a cloud platform 
 
 ## Database overview
 ![Database overview](./docs/db.png)
