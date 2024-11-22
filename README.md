@@ -80,5 +80,4 @@ Some features that could be implemented:
 
 ## APIs
 
-[![API Swagger](./docs/openapi.png)
-https://petstore.swagger.io/?url=https://raw.githubusercontent.com/imantoniojuan/orders/refs/heads/main/docs/openapi.yaml]
+[![API Swagger](./docs/openapi.png)](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/imantoniojuan/orders/refs/heads/main/docs/openapi.yaml)
