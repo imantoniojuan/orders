@@ -19,7 +19,7 @@ For building and running the application you need:
 A local database has to be running to be able to run unit tests or the application locally. One of the ways I did it was using a Docker Instance for MySQL 8.0
 
 ```
-docker run --name mysql-local -e MYSQL_ROOT_PASSWORD=jEaj6knQh9WM8m0 -e MYSQL_USER=developer -e MYSQL_PASSWORD=yer1S6W3FiEURol -e MYSQL_DATABASE=bookstore -p 3306:3306 -d mysql:8.0.40
+docker run --name mysql-local -e MYSQL_ROOT_PASSWORD=jEaj6knQh9WM8m0 -e MYSQL_USER=developer -e MYSQL_PASSWORD=yer1S6W3FiEURol -e MYSQL_DATABASE=orders -p 3306:3306 -d mysql:8.0.40
 ```
 
 There are several ways to run a Spring Boot application on your local machine. 
